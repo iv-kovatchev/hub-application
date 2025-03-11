@@ -31,3 +31,7 @@ C:\Users\Ivan\Desktop\hub-application\backend\obj\Debug\net9.0\refint\backend.dl
 C:\Users\Ivan\Desktop\hub-application\backend\obj\Debug\net9.0\backend.pdb
 C:\Users\Ivan\Desktop\hub-application\backend\obj\Debug\net9.0\backend.genruntimeconfig.cache
 C:\Users\Ivan\Desktop\hub-application\backend\obj\Debug\net9.0\ref\backend.dll
+C:\Users\Ivan\Desktop\hub-application\backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\Ivan\Desktop\hub-application\backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\Ivan\Desktop\hub-application\backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\Ivan\Desktop\hub-application\backend\obj\Debug\net9.0\backend.sourcelink.json
