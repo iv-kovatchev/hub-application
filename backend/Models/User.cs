@@ -12,5 +12,6 @@ public class User : IdentityUser
     [MaxLength(50)]
     public string? Location { get; set; }
 
+    [MaxLength(500)]
     public string? ProfileImg { get; set; }
 }
