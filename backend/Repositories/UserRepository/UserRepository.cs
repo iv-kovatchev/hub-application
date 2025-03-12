@@ -4,13 +4,14 @@ using Microsoft.EntityFrameworkCore;
 public class UserRepository : IUserRepository
 {
     private readonly AppDbContext _context;
-
     private readonly UserManager<User> _userManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
 
-    public UserRepository(AppDbContext context, UserManager<User> userManager)
+    public UserRepository(AppDbContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
     {
         _context = context;
         _userManager = userManager;
+        _roleManager = roleManager;
     }
 
     public async Task<IEnumerable<User>> GetAllUsers()
@@ -60,5 +61,13 @@ public class UserRepository : IUserRepository
     public async Task<bool> CheckPassword(User user, string password)
     {
         return await _userManager.CheckPasswordAsync(user, password);
+    }
+
+    public async Task AssignRole(User user, string role) {
+        if(!await _roleManager.RoleExistsAsync(role)) {
+            await _roleManager.CreateAsync(new IdentityRole(role));
+        }
+
+        await _userManager.AddToRoleAsync(user, role);
     }
 }

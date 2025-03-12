@@ -26,7 +26,11 @@ public class AuthService : IAuthService
             ProfileImg = profileImg
         };
 
-        return await _userRepository.CreateUser(user, password);
+        User? result = await _userRepository.CreateUser(user, password);
+        
+        await _userRepository.AssignRole(result, "User");
+
+        return result;
     }
 
     public async Task<string?> LoginUser(string username, string password)

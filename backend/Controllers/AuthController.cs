@@ -26,6 +26,7 @@ public class AuthController : ControllerBase
                 model.Location,
                 model.ProfileImg
             );
+            
             return Ok(new UserResponseDto { Id = user.Id, Username = user.UserName! });
         }
         catch (Exception ex)
