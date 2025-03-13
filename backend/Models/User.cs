@@ -14,4 +14,6 @@ public class User : IdentityUser
 
     [MaxLength(500)]
     public string? ProfileImg { get; set; }
+
+    public virtual ICollection<IdentityUserRole<string>> UserRoles { get; set; } = new List<IdentityUserRole<string>>();
 }

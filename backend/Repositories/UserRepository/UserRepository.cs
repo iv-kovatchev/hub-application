@@ -54,7 +54,7 @@ public class UserRepository : IUserRepository
             var errors = result.Errors.Select(e => e.Description).ToList();
             throw new Exception(string.Join(" | ", errors));
         }
-        
+
         return user;
     }
 
@@ -63,11 +63,18 @@ public class UserRepository : IUserRepository
         return await _userManager.CheckPasswordAsync(user, password);
     }
 
-    public async Task AssignRole(User user, string role) {
-        if(!await _roleManager.RoleExistsAsync(role)) {
+    public async Task AssignRole(User user, string role)
+    {
+        if (!await _roleManager.RoleExistsAsync(role))
+        {
             await _roleManager.CreateAsync(new IdentityRole(role));
         }
 
         await _userManager.AddToRoleAsync(user, role);
+    }
+
+    public async Task<List<string>> GetUserRoles(User user)
+    {
+        return (await _userManager.GetRolesAsync(user)).ToList();
     }
 }

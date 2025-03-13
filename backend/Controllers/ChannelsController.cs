@@ -5,19 +5,18 @@ using Microsoft.AspNetCore.Mvc;
 [ApiController]
 public class ChannelsController : ControllerBase
 {
-    private readonly ILogger<ChannelsController> _logger;
-    
-    public ChannelsController(ILogger<ChannelsController> logger)
-    {
-        _logger = logger;
-            _logger.LogInformation("✅ ChannelsController Loaded!");
-    }
-
     [Authorize]
     [HttpGet]
     public IActionResult GetChannels()
     {
-        Console.WriteLine("✅ GetChannels() API Called!");
+        return Ok();
+    }
+
+    [HttpGet]
+    [Route("admin")]
+    [Authorize(Roles = "Admin")]
+    public IActionResult GetChannels2()
+    {
         return Ok();
     }
 }

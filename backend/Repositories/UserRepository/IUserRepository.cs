@@ -10,4 +10,6 @@ public interface IUserRepository {
     Task<bool> CheckPassword(User user, string password);
 
     Task AssignRole(User user, string role);
+
+    Task<List<string>> GetUserRoles(User user);
 }
