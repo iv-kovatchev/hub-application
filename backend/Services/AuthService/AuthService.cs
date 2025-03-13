@@ -62,6 +62,7 @@ public class AuthService : IAuthService
             };
 
         var roles = await _userRepository.GetUserRoles(user);
+        Console.WriteLine($"Roles for {user.UserName}: {string.Join(", ", roles)}");
         foreach (var role in roles)
         {
             claims.Add(new Claim(ClaimTypes.Role, role));

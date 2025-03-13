@@ -1,3 +1,6 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/auth")]
@@ -26,7 +29,7 @@ public class AuthController : ControllerBase
                 model.Location,
                 model.ProfileImg
             );
-            
+
             return Ok(new UserResponseDto { Id = user.Id, Username = user.UserName! });
         }
         catch (Exception ex)
@@ -44,5 +47,21 @@ public class AuthController : ControllerBase
         if (token == null) return Unauthorized(new { message = "Invalid username or password" });
 
         return Ok(new { token });
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public IActionResult GetCurrentser()
+    {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? User.FindFirst("sub")?.Value;
+        var username = User.FindFirst(ClaimTypes.Name)?.Value ?? User.FindFirst("unique_name")?.Value;
+        var roles = User.FindAll(ClaimTypes.Role).Select(r => r.Value).ToList();
+
+        if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(username))
+        {
+            return Unauthorized(new { message = "Invalid or expired JWT token" });
+        }
+
+        return Ok(new { id = userId, username, roles });
     }
 }
