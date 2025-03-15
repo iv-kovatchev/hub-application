@@ -1,19 +1,21 @@
-
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
 
 public class AuthService : IAuthService
 {
     private readonly IUserRepository _userRepository;
+
+    private readonly UserManager<User> _userManager;
+
     private readonly IConfiguration _configuration;
 
-    public AuthService(IUserRepository userRepository, IConfiguration configuration)
+    private readonly ITokenService _tokenService;
+
+    public AuthService(IUserRepository userRepository, UserManager<User> userManager, IConfiguration configuration, ITokenService tokenService)
     {
         _userRepository = userRepository;
+        _userManager = userManager;
         _configuration = configuration;
+        _tokenService = tokenService;
     }
 
     public async Task<User> RegisterUser(string username, string password, string? firstName, string? lastName, string? location, string? profileImg)
@@ -34,7 +36,7 @@ public class AuthService : IAuthService
         return result;
     }
 
-    public async Task<string?> LoginUser(string username, string password)
+    public async Task<AuthResponse?> LoginUser(string username, string password)
     {
         User? user = await _userRepository.GetUserByUsername(username);
         if (user == null) return null;
@@ -42,38 +44,25 @@ public class AuthService : IAuthService
         bool isPasswordValid = await _userRepository.CheckPassword(user, password);
         if (!isPasswordValid) return null;
 
-        return await GenerateJwtToken(user);
+        return await _tokenService.GenerateJwtToken(user);
     }
 
-    private async Task<string> GenerateJwtToken(User user)
+    public async Task<bool> Logout(string refreshToken)
     {
-        var secretKey = _configuration["Jwt:SecretKey"];
-        if (string.IsNullOrEmpty(secretKey))
+        // Find the user associated with this refresh token
+        var user = await _userRepository.GetUserByRefreshToken(refreshToken);
+        if (user == null)
         {
-            throw new Exception("JWT Secret Key is missing!");
+            return false;
         }
 
-        var key = Encoding.UTF8.GetBytes(secretKey);
+        //Remove refresh token to prevent further use
+        user.RefreshToken = null;
+        user.RefreshTokenExpiryTime = DateTime.MinValue;
 
-        var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName!)
-            };
+        //Update user in database
+        await _userRepository.UpdateUser(user);
 
-        var roles = await _userRepository.GetUserRoles(user);
-        Console.WriteLine($"Roles for {user.UserName}: {string.Join(", ", roles)}");
-        foreach (var role in roles)
-        {
-            claims.Add(new Claim(ClaimTypes.Role, role));
-        }
-
-        var token = new JwtSecurityToken(
-            expires: DateTime.UtcNow.AddHours(3),
-            claims: claims,
-            signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
-        );
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        return true;
     }
 }

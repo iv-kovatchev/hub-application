@@ -12,4 +12,8 @@ public interface IUserRepository {
     Task AssignRole(User user, string role);
 
     Task<List<string>> GetUserRoles(User user);
+
+    Task UpdateUser(User user);
+
+    Task<User?> GetUserByRefreshToken(string refreshToken);
 }

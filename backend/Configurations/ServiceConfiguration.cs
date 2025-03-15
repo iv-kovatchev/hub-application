@@ -47,5 +47,6 @@ public static class ServiceConfiguration
         services.AddEndpointsApiExplorer();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<ITokenService, TokenService>();
     }
 }

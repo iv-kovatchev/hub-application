@@ -14,4 +14,8 @@ public class User : IdentityUser
 
     [MaxLength(500)]
     public string? ProfileImg { get; set; }
+
+    public string? RefreshToken { get; set; }
+    
+    public DateTime RefreshTokenExpiryTime { get; set; } 
 }

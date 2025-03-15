@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 public class UserRegisterDto
 {
     [Required]
-    [MaxLength(50)]
+    [MinLength(4), MaxLength(50)]
     public string Username { get; set; } = string.Empty;
 
     [Required]

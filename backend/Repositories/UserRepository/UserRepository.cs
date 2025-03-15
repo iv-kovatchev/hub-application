@@ -77,4 +77,15 @@ public class UserRepository : IUserRepository
     {
         return (await _userManager.GetRolesAsync(user)).ToList();
     }
+
+    public async Task UpdateUser(User user)
+    {
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<User?> GetUserByRefreshToken(string refreshToken)
+    {
+        return await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshToken == refreshToken);
+    }
 }
