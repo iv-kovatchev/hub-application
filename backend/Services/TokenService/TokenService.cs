@@ -30,7 +30,7 @@ public class TokenService : ITokenService
         {
             AccessToken = accessToken,
             RefreshToken = refreshToken,
-            Expiration = DateTime.UtcNow.AddMinutes(refreshTokenExpiration)
+            Expiration = DateTime.UtcNow.AddDays(refreshTokenExpiration)
         };
     }
 
@@ -53,7 +53,7 @@ public class TokenService : ITokenService
         {
             AccessToken = newAccessToken,
             RefreshToken = newRefreshToken,
-            Expiration = DateTime.UtcNow.AddMinutes(1)
+            Expiration = DateTime.UtcNow.AddMinutes(15)
         };
     }
 

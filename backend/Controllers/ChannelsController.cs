@@ -9,14 +9,14 @@ public class ChannelsController : ControllerBase
     [HttpGet]
     public IActionResult GetChannels()
     {
-        return Ok();
-    }
+        var dummyChannels = new List<object>
+        {
+            new { Id = 1, Name = "General", Description = "General discussion channel" },
+            new { Id = 2, Name = "Tech Talk", Description = "Discuss latest tech trends" },
+            new { Id = 3, Name = "Gaming", Description = "All about gaming and fun" },
+            new { Id = 4, Name = "Music", Description = "Share and talk about music" }
+        };
 
-    [HttpGet]
-    [Route("admin")]
-    [Authorize(Roles = "Admin")]
-    public IActionResult GetChannels2()
-    {
-        return Ok();
+        return Ok(dummyChannels);
     }
 }

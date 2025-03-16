@@ -1,4 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +35,18 @@ public class AuthController : ControllerBase
                 model.ProfileImg
             );
 
-            return Ok(new UserResponseDto { Id = user.Id, Username = user.UserName! });
+            var tokens = await _authService.LoginUser(model.Username, model.Password);
+
+            //Store refresh token in HttpOnly Cookie
+            Response.Cookies.Append("refresh_token", tokens!.RefreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddDays(int.Parse(_configuration["Jwt:RefreshTokenExpiration"]!))
+            });
+
+            return Ok(new UserResponseDto { Id = user.Id, Username = user.UserName!, AccessToken = tokens!.AccessToken });
         }
         catch (Exception ex)
         {
