@@ -48,5 +48,8 @@ public static class ServiceConfiguration
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ITokenService, TokenService>();
+
+        services.AddScoped<IChannelRepository, ChannelRepository>();
+        services.AddScoped<IChannelService, ChannelService>();
     }
 }

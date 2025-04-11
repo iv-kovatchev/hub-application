@@ -17,5 +17,7 @@ public class User : IdentityUser
 
     public string? RefreshToken { get; set; }
     
-    public DateTime RefreshTokenExpiryTime { get; set; } 
+    public DateTime RefreshTokenExpiryTime { get; set; }
+
+    public ICollection<Channel> Channels { get; set; } = new List<Channel>();
 }

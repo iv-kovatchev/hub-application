@@ -8,7 +8,7 @@ export const schemaValidation = yup.object().shape({
         .min(4, "Username must be at least 4 characters")
         .max(100, "Username cannot exceed 100 characters"),
     password: yup.string()    
-     .required("Username is required")
+     .required("Password is required")
         .min(6, "Password must be at least 6 characters")
         .max(50, "Password cannot exceed 50 characters")
         .matches(/[A-Z]/, "Must include at least one uppercase letter")

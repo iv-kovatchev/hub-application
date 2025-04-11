@@ -1,19 +1,14 @@
 import { useEffect, useState } from "react";
-import { fetchChannels } from "../api/channel";
+import { ChannelResponse, fetchChannels } from "../../api/channel";
 import { List, ListItem, ListItemText, Typography, CircularProgress, Alert, Container, Box } from "@mui/material";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-
-interface Channel {
-    id: string;
-    name: string;
-    description: string;
-  }
+import ChannelsTable from "./ChannelsTable";
 
 const Dashboard: React.FC = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
-    const [channels, setChannels] = useState<Channel[]>([]);
+    const [channels, setChannels] = useState<ChannelResponse[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -38,7 +33,7 @@ const Dashboard: React.FC = () => {
     }, [user, navigate]);
 
     return (
-        <Container maxWidth="md">
+        <Container maxWidth="lg">
             {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
 
             {loading ? (
@@ -47,7 +42,7 @@ const Dashboard: React.FC = () => {
                 </Box>
             ) : (
                 <>
-                    <Typography variant="h6" sx={{ mt: 3 }}>
+                    <Typography variant="h6" sx={{ mt: 2 }}>
                         Welcome, {user}!
                     </Typography>
 
@@ -55,17 +50,7 @@ const Dashboard: React.FC = () => {
                         Available Channels:
                     </Typography>
 
-                    <List>
-                        {channels.length > 0 ? (
-                            channels.map((channel, index) => (
-                                <ListItem key={index}>
-                                    <ListItemText primary={channel.name} secondary={channel.description} />
-                                </ListItem>
-                            ))
-                        ) : (
-                            <Typography>No channels available.</Typography>
-                        )}
-                    </List>
+                    <ChannelsTable channels={channels} />
                 </>
             )}
         </Container>
