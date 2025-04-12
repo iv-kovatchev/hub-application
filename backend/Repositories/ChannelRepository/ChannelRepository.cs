@@ -36,10 +36,11 @@ public class ChannelRepository : IChannelRepository
         return channel;
     }
 
-    public async Task UpdateChannel(Channel channel)
+    public async Task<Channel> UpdateChannel(Channel channel)
     {
         _context.Channels.Update(channel);
         await _context.SaveChangesAsync();
+        return channel;
     }
 
     public async Task<bool> DeleteChannel(Guid id)
@@ -54,7 +55,6 @@ public class ChannelRepository : IChannelRepository
 
     public async Task<bool> ChannelNameExists(string name)
     {
-        return await _context.Channels
-            .AnyAsync(c => c.Name == name);
+        return await _context.Channels.AnyAsync(c => c.Name == name);
     }
 }

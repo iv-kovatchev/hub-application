@@ -9,7 +9,7 @@ public interface IChannelRepository
 
     Task<Channel> CreateChannel(Channel channel);
 
-    Task UpdateChannel(Channel channel);
+    Task<Channel> UpdateChannel(Channel channel);
 
     Task<bool> DeleteChannel(Guid id);
 

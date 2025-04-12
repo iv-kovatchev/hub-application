@@ -12,7 +12,7 @@ interface NavbarProps {
   toggleDarkMode: () => void;
 }
 
-const pages = ['Dashboard'];
+const pages = ['Dashboard', 'My channels'];
 const settings = ['Settings', 'Logout'];
 
 const Navbar = ({ darkMode, toggleDarkMode }: NavbarProps) => {
@@ -36,6 +36,7 @@ const Navbar = ({ darkMode, toggleDarkMode }: NavbarProps) => {
                 fontSize: 16,
                 fontWeight: 700,
                 my: 2,
+                mr: 2,
                 color: "white",
                 display: "block",
                 "&:hover": { color: "white" }

@@ -45,10 +45,12 @@ public class ChannelsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetChannelById(Guid id) {
+    public async Task<IActionResult> GetChannelById(Guid id)
+    {
         var channel = await _channelService.GetById(id);
 
-        if(channel == null) {
+        if (channel == null)
+        {
             return NotFound(new { message = "Channel not found." });
         }
 
@@ -56,8 +58,53 @@ public class ChannelsController : ControllerBase
     }
 
     [HttpGet("user/{userId}")]
-    public async Task<IActionResult> GetChannelsByUserId(string userId) {
+    public async Task<IActionResult> GetChannelsByUserId(string userId)
+    {
         var result = await _channelService.GetChannelsByUserId(userId);
         return Ok(result);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateChannel(Guid id, [FromBody] UpdateChannelDto dto)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        try
+        {
+            var result = await _channelService.UpdateChannel(id, userId!, dto);
+
+            if (result == null)
+                return NoContent();
+
+            return Ok(result);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return StatusCode(StatusCodes.Status403Forbidden, new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteChannel(Guid id)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        try
+        {
+            await _channelService.DeleteChannel(id, userId!);
+            return NoContent();
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return StatusCode(StatusCodes.Status403Forbidden, new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 }
