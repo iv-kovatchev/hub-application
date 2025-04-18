@@ -23,7 +23,6 @@ const Register = () => {
             await registerUser(data);
             console.log("Registration successful!");
         } catch (error: any) {
-            console.log(error?.response?.data?.message);
             if (error.response && error.response.data && error.response.data.message) {
                 setErrorMessage(error.response.data.message);
             } else {

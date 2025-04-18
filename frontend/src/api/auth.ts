@@ -1,4 +1,5 @@
-const API_BASE_URL = "http://localhost:5098/api";
+// change
+const API_BASE_URL = import.meta.env.VITE_BASE_URL_API;
 
 export interface AuthResponse {
     accessToken: string;
@@ -28,7 +29,7 @@ export const register = async (userData: UserRegister): Promise<AuthResponse> =>
     const data: AuthResponse = await response.json();
 
     // Store access token securely
-    sessionStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("accessToken", data.accessToken);
 
     return data;
 };
@@ -48,7 +49,7 @@ export const login = async (username: string, password: string): Promise<AuthRes
     const data: AuthResponse = await response.json();
 
     // Store access token securely
-    sessionStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("accessToken", data.accessToken);
     return data;
 };
 
@@ -59,11 +60,11 @@ export const logout = async (): Promise<void> => {
         credentials: "include", // Ensures refresh token cookie is cleared
     });
 
-    sessionStorage.removeItem("accessToken");
+    localStorage.removeItem("accessToken");
 };
 
 export const refreshAccessToken = async (): Promise<string | null> => {
-    const existingToken = sessionStorage.getItem("accessToken");
+    const existingToken = localStorage.getItem("accessToken");
 
     //Only attempt refresh if there's an existing token
     if (!existingToken) {
@@ -83,6 +84,6 @@ export const refreshAccessToken = async (): Promise<string | null> => {
     }
 
     const data = await response.json();
-    sessionStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("accessToken", data.accessToken);
     return data.accessToken;
 };

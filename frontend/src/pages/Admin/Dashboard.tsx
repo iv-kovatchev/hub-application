@@ -21,8 +21,6 @@ const AdminPage = () => {
             });
     }, []);
 
-    console.log('here?')
-
     return (
         <Container maxWidth="md">
             <Typography variant="h3" align="center" sx={{ mt: 5 }}>

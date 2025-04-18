@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ChannelResponse, fetchChannels } from "../../api/channel";
-import { List, ListItem, ListItemText, Typography, CircularProgress, Alert, Container, Box } from "@mui/material";
+import { Typography, CircularProgress, Alert, Container, Box } from "@mui/material";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import ChannelsTable from "./ChannelsTable";

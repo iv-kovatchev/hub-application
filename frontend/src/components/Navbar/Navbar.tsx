@@ -31,7 +31,7 @@ const Navbar = ({ darkMode, toggleDarkMode }: NavbarProps) => {
             <Button
               key={page}
               component={Link as any}
-              to={page.toLowerCase()}
+              to={page.toLowerCase().replace(/\s+/g, "-")}
               sx={{
                 fontSize: 16,
                 fontWeight: 700,

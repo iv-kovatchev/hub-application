@@ -43,7 +43,20 @@ public static class TokenConfiguration
             {
                 OnMessageReceived = context =>
                 {
-                    context.Token = context.Request.Cookies["access_token"]; // Read token from cookie
+
+                    var accessToken = context.Request.Query["access_token"];
+
+                    var path = context.HttpContext.Request.Path;
+                    if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/chatHub"))
+                    {
+                        context.Token = accessToken;
+                    }
+                    else
+                    {
+                        // Fallback: accept token from cookie for normal API calls
+                        context.Token = context.Request.Cookies["access_token"];
+                    }
+
                     return Task.CompletedTask;
                 }
             };

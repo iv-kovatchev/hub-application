@@ -94,11 +94,6 @@ public class ChannelService : IChannelService
 
     public async Task<ChannelDto?> UpdateChannel(Guid id, string userId, UpdateChannelDto dto)
     {
-        bool isExist = await isChannelExist(dto.Name); 
-
-        if (isExist)
-            throw new Exception("Channel with this name already exists.");
-
         var user = await _userRepository.GetUserById(userId)
             ?? throw new Exception("User not found.");
 

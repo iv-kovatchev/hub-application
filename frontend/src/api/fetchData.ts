@@ -1,9 +1,9 @@
 import { refreshAccessToken, logout } from "./auth";
 
-const API_BASE_URL = "http://localhost:5098";
+const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const fetchData = async (endpoint: string, options: RequestInit = {}): Promise<any> => {
-  let token = sessionStorage.getItem("accessToken");
+  let token = localStorage.getItem("accessToken");
 
   const headers = {
     ...options.headers,
@@ -40,8 +40,17 @@ export const fetchData = async (endpoint: string, options: RequestInit = {}): Pr
   }
 
   if (!response.ok) {
-    throw new Error(`API Error: ${response.statusText}`);
+    let message = `API Error: ${response.statusText}`;
+    const body = await response.json();
+
+    if (body?.message) {
+      message = body.message;
+    }
+
+    throw new Error(message);
   }
+
+  if (response.status === 204) return null;
 
   return response.json();
 };

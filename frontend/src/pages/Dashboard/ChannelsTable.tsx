@@ -3,7 +3,6 @@ import LanIcon from '@mui/icons-material/Lan';
 import {
     Avatar,
     Button,
-    Container,
     Paper,
     Table,
     TableBody,
@@ -14,12 +13,19 @@ import {
 } from '@mui/material';
 
 import { ChannelResponse } from '../../api/channel';
+import { useNavigate } from 'react-router-dom';
 
 interface ChannelsTableProps {
     channels: ChannelResponse[]
 }
 
 const ChannelsTable = ({ channels }: ChannelsTableProps) => {
+    const navigate = useNavigate();
+
+    const handleConnect = (channel: ChannelResponse) => {
+        navigate("/channels/connected", { state: { channel } });
+    };
+
     return (
         <>
             <TableContainer sx={{ mt: 2 }} component={Paper}>
@@ -29,7 +35,7 @@ const ChannelsTable = ({ channels }: ChannelsTableProps) => {
                             <TableCell align='left'></TableCell>
                             <TableCell align="left">Name</TableCell>
                             <TableCell align="left">Description</TableCell>
-                            <TableCell align="center">Created by</TableCell>
+                            <TableCell align="center">Owner</TableCell>
                             <TableCell align="right"></TableCell>
                         </TableRow>
                     </TableHead>
@@ -40,7 +46,11 @@ const ChannelsTable = ({ channels }: ChannelsTableProps) => {
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
                                 <TableCell component="th" scope="row" sx={{ width: 56 }}>
-                                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                                    <Avatar
+                                        alt="Remy Sharp"
+                                        src={ch.imageUrl
+                                            ? `${import.meta.env.VITE_BASE_URL}${ch.imageUrl}`
+                                            : "/images/avatar/2.jpg"} />
                                 </TableCell>
                                 <TableCell align="left">{ch.name}</TableCell>
                                 <TableCell align="left">
@@ -50,7 +60,12 @@ const ChannelsTable = ({ channels }: ChannelsTableProps) => {
                                 </TableCell>
                                 <TableCell align="center">{ch.createdByUserName}</TableCell>
                                 <TableCell align="right">
-                                    <Button variant="outlined" size="small" startIcon={<LanIcon />}>
+                                    <Button
+                                        variant="outlined"
+                                        size="small"
+                                        startIcon={<LanIcon />}
+                                        onClick={() => handleConnect(ch)}
+                                    >
                                         Connect
                                     </Button>
                                 </TableCell>

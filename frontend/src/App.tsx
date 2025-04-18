@@ -26,7 +26,7 @@ const App = () => {
       <CssBaseline />
       <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
-      <Box sx={{ width: "100vw", height: "100vh", display: "flex", flexDirection: "column", mt: "84px" }}>
+      <Box sx={{ width: "100vw", display: "flex", flexDirection: "column", mt: "72px", mb: "48px" }}>
         <AppRoutes />
       </Box>
     </ThemeProvider>

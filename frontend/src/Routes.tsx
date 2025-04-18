@@ -6,6 +6,8 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import Test1 from "./pages/Test1";
 import AdminRoute from "./routes/AdminRoute";
 import AdminPage from "./pages/Admin/Dashboard";
+import MyChannels from "./pages/MyChannels/MyChannels";
+import Channel from "./pages/Channel";
 
 const AppRoutes: React.FC = () => {
 
@@ -20,6 +22,8 @@ const AppRoutes: React.FC = () => {
             <Route element={<ProtectedRoute />}>
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/test" element={<Test1 />} />
+                <Route path="/my-channels" element={<MyChannels />} />
+                <Route path="/channels/connected" element={<Channel />} />
             </Route>
 
             {/* Admin-Only Route */}
