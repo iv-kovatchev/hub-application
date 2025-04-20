@@ -34,18 +34,6 @@ public class ChatHub : Hub
         await Clients.Group(channelId).SendAsync("UsersUpdated", ChannelUsers[channelId]);
     }
 
-    public async Task TypingStarted(string channelId)
-    {
-        var username = Context.User?.Identity?.Name;
-        await Clients.OthersInGroup(channelId).SendAsync("UserTyping", channelId, username);
-    }
-
-    public async Task TypingStopped(string channelId)
-    {
-        var username = Context.User?.Identity?.Name;
-        await Clients.OthersInGroup(channelId).SendAsync("UserStoppedTyping", channelId, username);
-    }
-
     public async Task SendMessage(string channelId, string username, string message)
     {
         var userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -83,5 +71,15 @@ public class ChatHub : Hub
         }
 
         await Clients.Group(channelId).SendAsync("UsersUpdated", ChannelUsers.GetValueOrDefault(channelId, new HashSet<string>()));
+    }
+
+    public Task<Dictionary<string, int>> GetOnlineUserCounts()
+    {
+        var counts = ChannelUsers.ToDictionary(
+            kvp => kvp.Key,
+            kvp => kvp.Value.Count
+        );
+
+        return Task.FromResult(counts);
     }
 }

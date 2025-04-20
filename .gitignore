@@ -1,0 +1,55 @@
+# ASP.NET Core build and runtime files
+# Build
+backend/bin/
+backend/obj/
+backend/*.dll
+backend/*.exe
+
+# User settings
+backend/*.user
+backend/*.suo
+backend/.vscode/
+backend/.idea/
+
+# Publish
+backend/publish/
+backend/*.PublishProfiles/
+
+# Logs / Temp
+backend/*.log
+backend/*.tmp
+
+# EF Core Snapshot (optional)
+backend/**/*.Designer.cs
+backend/**/*Snapshot.cs
+
+# Others
+.env
+.env.*
+*.db
+
+# React + Vite frontend
+# Logs
+frontend/logs
+frontend/*.log
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+frontend/lerna-debug.log*
+
+frontend/node_modules
+frontend/dist
+frontend/dist-ssr
+frontend/*.local
+
+# Editor directories and files
+frontend/.vscode/*
+frontend/!.vscode/extensions.json
+frontend/.idea
+frontend/.DS_Store
+frontend/*.suo
+frontend/*.ntvs*
+frontend/*.njsproj
+frontend/*.sln
+frontend/*.sw?

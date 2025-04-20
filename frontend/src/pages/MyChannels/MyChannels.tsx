@@ -7,6 +7,7 @@ import ChannelDialog from "../../components/ChannelDialog";
 const MyChannels = () => {
     const {
         channels,
+        onlineCounts,
         error,
         loading,
         openDeleteModal,
@@ -91,6 +92,9 @@ const MyChannels = () => {
                                                     }}
                                                 >
                                                     {channel.description || "No description."}
+                                                </Typography>
+                                                <Typography variant="caption" color="text.secondary" mt={1}>
+                                                    👥 {onlineCounts[channel.id] || 0} online
                                                 </Typography>
                                             </CardContent>
                                             <Box

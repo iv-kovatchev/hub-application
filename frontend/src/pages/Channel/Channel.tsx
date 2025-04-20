@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { ChannelMessage, useChannel } from "./useChannel"
 import { Box } from "@mui/system";
-import { Button, CircularProgress, Divider, List, ListItem, ListItemText, Paper, TextField, Typography } from "@mui/material";
+import { Button, List, ListItem, ListItemText, Paper, TextField, Typography } from "@mui/material";
 import { useAuth } from "../../context/AuthContext";
 
 const Channel = () => {
@@ -17,11 +17,11 @@ const Channel = () => {
   const token = localStorage.getItem("accessToken") || "";
 
   const { sendMessage, connected } = useChannel(
-    channel?.id,
-    token,
-    (msg) => setMessages((prev) => [...prev, msg]),
-    (users: string[]) => setOnlineUsers(users)
-  );
+      channel?.id,
+      token,
+      (msg) => setMessages((prev) => [...prev, msg]),
+      (users: string[]) => setOnlineUsers(users)
+    );
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

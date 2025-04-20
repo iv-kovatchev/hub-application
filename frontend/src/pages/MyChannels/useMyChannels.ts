@@ -3,6 +3,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
 import { ChannelResponse, createChannel, deleteChannelById, fetchUserChannels, updateChannel } from "../../api/channel";
 import { ChannelFormData } from "../../components/ChannelDialog/ChannelDialog";
+import * as signalR from "@microsoft/signalr";
 
 export const useMyChannels = () => {
     const { userId } = useAuth();
@@ -15,11 +16,35 @@ export const useMyChannels = () => {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [selectedChannel, setSelectedChannel] = useState<ChannelResponse | null>(null);
     const [deleting, setDeleting] = useState(false);
+    const [onlineCounts, setOnlineCounts] = useState<Record<string, number>>({});
+
+    const fetchOnlineCounts = async () => {
+        const token = localStorage.getItem("accessToken");
+        if (!token) return;
+
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl(`${import.meta.env.VITE_BASE_URL}/chathub`, {
+                accessTokenFactory: () => token,
+            })
+            .withAutomaticReconnect()
+            .build();
+
+        try {
+            await connection.start();
+            const result = await connection.invoke<Record<string, number>>("GetOnlineUserCounts");
+            setOnlineCounts(result);
+        } catch (err) {
+            console.warn("Failed to fetch online counts:", err);
+        } finally {
+            await connection.stop();
+        }
+    };
 
     const loadChannels = async () => {
         try {
             const data = await fetchUserChannels(userId!);
             setChannels(data);
+            await fetchOnlineCounts();
         } catch (err) {
             setError("Failed to fetch channels.");
         } finally {
@@ -87,6 +112,7 @@ export const useMyChannels = () => {
 
     return {
         channels,
+        onlineCounts,
         error,
         loading,
         openDeleteModal,
