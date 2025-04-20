@@ -24,9 +24,9 @@ backend/**/*.Designer.cs
 backend/**/*Snapshot.cs
 
 # Others
-.env
-.env.*
-*.db
+backend/.env
+backend/.env.*
+backend/*.db
 
 # React + Vite frontend
 # Logs
