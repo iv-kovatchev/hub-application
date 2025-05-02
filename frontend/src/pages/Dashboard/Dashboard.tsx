@@ -3,7 +3,7 @@ import { ChannelResponse, fetchChannels } from "../../api/channel";
 import { Typography, CircularProgress, Alert, Container, Box } from "@mui/material";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import ChannelsTable from "./ChannelsTable";
+import ChannelsTable from "../../components/ChannelsTable";
 
 const Dashboard: React.FC = () => {
     const { user } = useAuth();

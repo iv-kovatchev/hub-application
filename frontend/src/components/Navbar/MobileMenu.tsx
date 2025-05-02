@@ -5,17 +5,30 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 interface MobileMenuProps {
-    pages: string[]
+    pages: string[],
+    userRole: string | null
 }
 
-const MobileMenu = ({ pages }: MobileMenuProps) => {
+const MobileMenu = ({ pages, userRole }: MobileMenuProps) => {
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+    const [adminAnchorEl, setAdminAnchorEl] = useState<null | HTMLElement>(null);
+
+    const isAdminMenuOpen = Boolean(adminAnchorEl);
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
     };
 
     const handleCloseNavMenu = () => {
+        setAnchorElNav(null);
+    };
+
+    const handleAdminMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAdminAnchorEl(event.currentTarget);
+    };
+
+    const handleAdminMenuClose = () => {
+        setAdminAnchorEl(null);
         setAnchorElNav(null);
     };
 
@@ -54,10 +67,31 @@ const MobileMenu = ({ pages }: MobileMenuProps) => {
                     sx={{ display: { xs: 'block', md: 'none' } }}
                 >
                     {pages.map((page) => (
-                        <MenuItem key={page} onClick={handleCloseNavMenu}>
+                        <MenuItem key={page} onClick={handleCloseNavMenu} component={Link} to={page.toLowerCase().replace(/\s+/g, "-")} >
                             <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
                         </MenuItem>
                     ))}
+
+                    {userRole === "Admin" && (
+                        <MenuItem onClick={handleAdminMenuOpen}>
+                            <Typography textAlign="center">Admin</Typography>
+                        </MenuItem>
+                    )}
+                </Menu>
+
+                <Menu
+                    anchorEl={adminAnchorEl}
+                    open={isAdminMenuOpen}
+                    onClose={handleAdminMenuClose}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+                >
+                    <MenuItem component={Link} to="/admin/users" onClick={handleAdminMenuClose}>
+                        Users
+                    </MenuItem>
+                    <MenuItem component={Link} to="/admin/channels" onClick={handleAdminMenuClose}>
+                        Channels
+                    </MenuItem>
                 </Menu>
             </Box>
             <HubIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />

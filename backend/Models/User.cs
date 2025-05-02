@@ -19,5 +19,7 @@ public class User : IdentityUser
     
     public DateTime RefreshTokenExpiryTime { get; set; }
 
+    public bool IsBanned { get; set; } = false;
+
     public ICollection<Channel> Channels { get; set; } = new List<Channel>();
 }

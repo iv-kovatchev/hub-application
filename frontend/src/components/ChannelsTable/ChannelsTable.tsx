@@ -13,18 +13,24 @@ import {
 } from '@mui/material';
 
 import { ChannelResponse } from '../../api/channel';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Box, display } from '@mui/system';
 
 interface ChannelsTableProps {
-    channels: ChannelResponse[]
+    channels: ChannelResponse[],
+    handleDeleteClick?: (channel: ChannelResponse) => void,
+    openEdit?: (channel: ChannelResponse) => void
 }
 
-const ChannelsTable = ({ channels }: ChannelsTableProps) => {
+const ChannelsTable = ({ channels, handleDeleteClick, openEdit }: ChannelsTableProps) => {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleConnect = (channel: ChannelResponse) => {
         navigate("/channels/connected", { state: { channel } });
     };
+
+    console.log(channels);
 
     return (
         <>
@@ -60,14 +66,30 @@ const ChannelsTable = ({ channels }: ChannelsTableProps) => {
                                 </TableCell>
                                 <TableCell align="center">{ch.createdByUserName}</TableCell>
                                 <TableCell align="right">
-                                    <Button
-                                        variant="outlined"
-                                        size="small"
-                                        startIcon={<LanIcon />}
-                                        onClick={() => handleConnect(ch)}
-                                    >
-                                        Connect
-                                    </Button>
+                                    {(location.pathname === '/admin/channels')  && openEdit && handleDeleteClick ?
+                                        <>
+                                            <Box>
+                                                <Button
+                                                    size="small"
+                                                    color="primary"
+                                                    onClick={() => openEdit(ch)}>Edit</Button>
+                                                <Button
+                                                    size="small"
+                                                    color="error"
+                                                    onClick={() => handleDeleteClick(ch)}>Delete</Button>
+
+                                            </Box>
+
+                                        </> :
+                                        <Button
+                                            variant="outlined"
+                                            size="small"
+                                            startIcon={<LanIcon />}
+                                            onClick={() => handleConnect(ch)}
+                                        >
+                                            Connect
+                                        </Button>
+                                    }
                                 </TableCell>
                             </TableRow>
                         ))}

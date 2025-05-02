@@ -13,7 +13,7 @@ public interface IUserRepository {
 
     Task<List<string>> GetUserRoles(User user);
 
-    Task UpdateUser(User user);
-
+    Task<User> UpdateUser(User user);
+    
     Task<User?> GetUserByRefreshToken(string refreshToken);
 }
