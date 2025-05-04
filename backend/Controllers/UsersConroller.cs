@@ -15,11 +15,11 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetChannels()
+    public async Task<IActionResult> GetUsers()
     {
-        var channels = await _userService.GetAllUsers();
+        var users = await _userService.GetAllUsers();
 
-        return Ok(channels);
+        return Ok(users);
     }
 
     [Authorize]
@@ -43,7 +43,7 @@ public class UsersController : ControllerBase
         {
             await _userService.BanUser(id);
 
-            return Ok();
+            return NoContent();
         }
         catch (Exception ex)
         {

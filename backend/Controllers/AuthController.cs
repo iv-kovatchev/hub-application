@@ -59,19 +59,26 @@ public class AuthController : ControllerBase
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        var tokens = await _authService.LoginUser(model.Username, model.Password);
-        if (tokens == null) return Unauthorized(new { message = "Invalid username or password" });
-
-        //Store refresh token in HttpOnly Cookie
-        Response.Cookies.Append("refresh_token", tokens.RefreshToken, new CookieOptions
+        try
         {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Strict,
-            Expires = DateTime.UtcNow.AddDays(int.Parse(_configuration["Jwt:RefreshTokenExpiration"]!))
-        });
+            var tokens = await _authService.LoginUser(model.Username, model.Password);
+            if (tokens == null) return Unauthorized(new { message = "Invalid username or password. Please try again." });
 
-        return Ok(new { accessToken = tokens.AccessToken });
+            //Store refresh token in HttpOnly Cookie
+            Response.Cookies.Append("refresh_token", tokens.RefreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddDays(int.Parse(_configuration["Jwt:RefreshTokenExpiration"]!))
+            });
+
+            return Ok(new { accessToken = tokens.AccessToken });
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
     }
 
     [HttpPost("refresh")]

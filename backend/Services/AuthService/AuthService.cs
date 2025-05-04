@@ -41,6 +41,11 @@ public class AuthService : IAuthService
         User? user = await _userRepository.GetUserByUsername(username);
         if (user == null) return null;
 
+        if (user.IsBanned)
+        {
+            throw new UnauthorizedAccessException("This account has been banned.");
+        }
+
         bool isPasswordValid = await _userRepository.CheckPassword(user, password);
         if (!isPasswordValid) return null;
 

@@ -71,14 +71,17 @@ public class UserService : IUserService
 
     public async Task BanUser(string id)
     {
-        var user = await _userRepository.GetUserById(id);
+        var user = await _userRepository.GetUserById(id)
+            ?? throw new Exception("User not found.");
 
-        if (user == null)
+        var roles = await _userRepository.GetUserRoles(user);
+        if (roles.Contains("Admin"))
         {
-            throw new Exception("User not found.");
+            throw new Exception("Cannot ban admin user.");
         }
 
-        if(user.IsBanned) {
+        if (user.IsBanned)
+        {
             throw new Exception("User is already banned.");
         }
 
